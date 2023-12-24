@@ -1,5 +1,3 @@
-require 'faraday_adapter_socks'
-
 module Bitfinex
   module RESTClient
     def check_params(params, allowed_params)
@@ -36,10 +34,7 @@ module Bitfinex
 
     def new_rest_connection
       Faraday.new(url: base_api_endpoint, :proxy => config[:proxy]) do |conn|
-        conn.use Bitfinex::CustomErrors
         conn.response :logger, Logger.new(STDOUT), bodies: true  if config[:debug_connection]
-        conn.use FaradayMiddleware::ParseJson, :content_type => /\bjson$/
-        conn.adapter :net_http_socks
       end
     end
 

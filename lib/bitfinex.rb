@@ -3,7 +3,6 @@ require 'base64'
 require 'openssl'
 require 'faraday'
 require 'json'
-require 'faraday_middleware'
 require 'dotenv/load'
 
 require_relative './errors'
