@@ -34,6 +34,8 @@ module Bitfinex
 
     def new_rest_connection
       Faraday.new(url: base_api_endpoint, :proxy => config[:proxy]) do |conn|
+        conn.request :json
+        conn.response :json
         conn.response :logger, Logger.new(STDOUT), bodies: true  if config[:debug_connection]
       end
     end
