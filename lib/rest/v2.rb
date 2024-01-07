@@ -16,7 +16,7 @@ module Bitfinex
   class RESTv2
     attr_accessor :api_endpoint, :debug, :debug_connection, :api_version
     attr_accessor :rest_timeout, :rest_open_timeout, :proxy
-    attr_accessor :api_key, :api_secret, :aff_code
+    attr_accessor :api_key, :api_secret, :aff_code, :check_errors
 
     include Bitfinex::RESTClient
     include Bitfinex::RESTv2Margin
@@ -42,6 +42,7 @@ module Bitfinex
       self.api_key = args[:api_key]
       self.api_secret = args[:api_secret]
       self.aff_code = args[:aff_code]
+      self.check_errors = args[:check_errors]
     end
 
     def config

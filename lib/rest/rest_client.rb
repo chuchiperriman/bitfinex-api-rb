@@ -75,6 +75,11 @@ module Bitfinex
           req.headers['bfx-apikey'] = config[:api_key]
         end
       end
+
+      if options[:check_errors] || self.try(:check_errors)
+        check_errors!(response)
+      end
+      response
     end
 
     def build_payload(url, params = {}, nonce)
@@ -95,6 +100,20 @@ module Bitfinex
 
     def valid_key?
       !! (config[:api_key] && config[:api_secret])
+    end
+
+    # Formato de error ["error", 10100, "apikey: invalid"]
+    def check_errors!(response)
+      data = response.body
+      raise 'No hubo respuesta del servidor' if data.blank?
+      unless data.is_a?(Array)
+        Rails.logger.error("Respuesta de Bitfinex desconocida: #{data}")
+        raise 'Respuesta del exchange desconocida'
+      end
+
+      if data.first == 'error'
+        raise "Error del exchange: #{data[1]} - #{data[2]}"
+      end
     end
   end
 end
