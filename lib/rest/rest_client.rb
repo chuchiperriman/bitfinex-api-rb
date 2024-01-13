@@ -105,7 +105,10 @@ module Bitfinex
     # Formato de error ["error", 10100, "apikey: invalid"]
     def check_errors!(response)
       data = response.body
-      raise 'No hubo respuesta del servidor' if data.blank?
+
+      # El servidor puede no responder nada si no hay datos
+      return if data.nil?
+
       unless data.is_a?(Array)
         Rails.logger.error("Respuesta de Bitfinex desconocida: #{data}")
         raise 'Respuesta del exchange desconocida'
